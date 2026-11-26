@@ -9,19 +9,16 @@ jobs:
   test:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: msys2/setup-msys2@v2
         with:
           msystem: UCRT64
           install: >-
             mingw-w64-ucrt-x86_64-gcc
-            mingw-w64-ucrt-x86_64-make
+            mingw-w64-ucrt-x86_64-ninja
             mingw-w64-ucrt-x86_64-cmake
       - name: Build and test all five stages
         shell: msys2 {0}
         working-directory: 2025310202019_孙弋格
         run: |
-          cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Debug
-          cmake --build build --parallel 2
-          cd build
-          ctest -C Debug --output-on-failure
+          MSYS2_ARG_CONV_EXCL='*' cmd.exe /d /c 'script\build_and_run.bat'
