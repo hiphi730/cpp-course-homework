@@ -8,20 +8,20 @@
 
 ## 运行测试
 
-需要 CMake 3.16 或更高版本，以及支持 C++17 的编译器。解压作业包或克隆仓库后，先进入含有五个实验的 `2025310202019_孙弋格` 文件夹。
+完整解压提交包，或克隆仓库。进入含有五个实验的 `2025310202019_孙弋格` 文件夹。
 
-在 Windows 上安装 CMake、MinGW-w64（gcc、g++）及 Ninja，确保它们在 PATH 中。在作业文件夹的命令提示符中运行：
+Windows 下使用课程 MinGW-w64，请确保支持 C++17 的 `g++` 和 `mingw32-make` 在 PATH 中。在命令提示符中运行：
 
 ```bat
 script\build_and_run.bat
 ```
 
-脚本使用 MinGW 编译、Ninja 构建，支持作业中的中文目录。可在 [Windows 自动测试记录](https://github.com/hiphi730/cpp-course-homework/actions/workflows/windows.yml) 查看本次提交的结果。
+脚本逐个进入中文实验目录，用相对路径编译并运行五组测试，最后显示 `All five stages passed.`。此方式无需安装 Ninja 或 CMake。[Windows 自动测试记录](https://github.com/hiphi730/cpp-course-homework/actions/workflows/windows.yml)
 
-在 macOS 或 Linux 上运行：
+macOS 或 Linux 使用 CMake 3.16 及以上和 C++17 编译器，运行：
 
 ```sh
 sh script/build_and_run.sh
 ```
 
-CTest 分别运行五个阶段的测试程序。一共包含 421 个 GoogleTest 用例。五个程序均通过时，CTest 会显示 `100% tests passed, 0 tests failed out of 5`。
+五个阶段分别包含 18、35、36、65、267 个 GoogleTest 用例，共 421 个。
