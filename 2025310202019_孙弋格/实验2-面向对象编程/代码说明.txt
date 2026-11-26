@@ -1,0 +1,28 @@
+实验2-面向对象编程
+
+对应需求：需求1、需求2-支持加速功能.md。
+本阶段保留基础功能，并加入可反复切换的F状态。
+
+设计说明：
+1. ICommand定义DoOperate抽象方法，MoveCommand、TurnLeftCommand、TurnRightCommand、FastCommand继承接口。
+2. 命令选择与具体行为分开；ExecutorImpl只维护状态、提供基础操作并调用命令。
+3. 加速M调用两次单格Move；加速L/R先Move一格再转向；再次F恢复普通状态。
+4. 本阶段命令依赖ExecutorImpl；下一阶段通过抽离PoseHandler消除这项耦合。
+
+测试说明：
+共35例，保留18例基础测试，增加17例加速测试，覆盖四向M/L/R、FF取消状态、跨Execute调用保持状态和不同对象状态隔离。
+
+文件组织：
+include/：对外接口。
+src/：本阶段完整实现，不依赖其他实验的业务源码。
+tests/：本阶段GoogleTest测试及构建文件。
+CMakeLists.txt：本阶段构建入口。
+各阶段共用提交根目录的cmake/和third_party/，请保留整个提交文件夹。
+
+从提交根目录单独构建本阶段：
+cmake -S "实验2-面向对象编程" -B "build-stage2" -DCMAKE_BUILD_TYPE=Debug
+cmake --build "build-stage2" --config Debug --parallel
+cd "build-stage2"
+ctest -C Debug --output-on-failure
+
+也可在提交根目录运行script/build_and_run.sh或script/build_and_run.bat，统一构建五个阶段。

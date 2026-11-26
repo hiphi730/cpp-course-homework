@@ -1,0 +1,29 @@
+实验3-2-面向函数式编程
+
+对应需求：需求1至需求3；对应课件：实验3-2-面向函数式编程.pptx。
+本阶段使用函数式命令组织方式，加入B及B/F叠加规则。
+
+设计说明：
+1. Command为std::function<void(PoseHandler&)>，各命令提供operator()，以函数对象替代命令继承层次。
+2. 表中按值保存无状态函数对象，不保存局部变量引用或悬空this指针。
+3. PoseHandler维护两个独立布尔状态。Move根据B选择正负单步，L/R根据B交换旋转方向。
+4. 命令层仅根据F决定是否在移动/转向前增加一次Move，避免为B/F组合逐项编写分支。
+5. B/F只切换状态，不立即改变位置或朝向；状态在多次Execute之间持续存在。
+
+测试说明：
+共65例。保留基本及加速测试，增加30例倒车测试，覆盖四向BM/BL/BR/BFM/BFL/BFR、BB/FF取消、状态独立切换、混合批量指令及BF/FB顺序等价。
+
+文件组织：
+include/：对外接口。
+src/：本阶段完整实现，不依赖其他实验的业务源码。
+tests/：本阶段GoogleTest测试及构建文件。
+CMakeLists.txt：本阶段构建入口。
+各阶段共用提交根目录的cmake/和third_party/，请保留整个提交文件夹。
+
+从提交根目录单独构建本阶段：
+cmake -S "实验3-2-面向函数式编程" -B "build-stage4" -DCMAKE_BUILD_TYPE=Debug
+cmake --build "build-stage4" --config Debug --parallel
+cd "build-stage4"
+ctest -C Debug --output-on-failure
+
+也可在提交根目录运行script/build_and_run.sh或script/build_and_run.bat，统一构建五个阶段。

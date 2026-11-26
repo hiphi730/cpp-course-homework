@@ -1,0 +1,29 @@
+实验3-1-面向对象编程
+
+对应课件：实验3-1-面向对象编程.pptx。
+本阶段重构实验2的设计，保留M/L/R/F行为。
+
+设计说明：
+1. PoseHandler独立封装坐标、方向和加速状态；命令依赖PoseHandler，不再依赖ExecutorImpl。
+2. ICommand及派生类只使用状态操作接口，避免命令与执行器相互依赖。
+3. 使用std::unordered_map按指令查表分派，std::unique_ptr管理多态命令对象。
+4. 坐标增量与方向表使用std::array组织；Execute只负责查表并调用命令。
+5. 共享命令不保存车辆状态，各Executor独立持有自己的PoseHandler。
+
+测试说明：
+共36例。保留基本及加速测试，增加反复创建/释放执行器的回归用例，验证共享命令不导致状态串扰。
+
+文件组织：
+include/：对外接口。
+src/：本阶段完整实现，不依赖其他实验的业务源码。
+tests/：本阶段GoogleTest测试及构建文件。
+CMakeLists.txt：本阶段构建入口。
+各阶段共用提交根目录的cmake/和third_party/，请保留整个提交文件夹。
+
+从提交根目录单独构建本阶段：
+cmake -S "实验3-1-面向对象编程" -B "build-stage3" -DCMAKE_BUILD_TYPE=Debug
+cmake --build "build-stage3" --config Debug --parallel
+cd "build-stage3"
+ctest -C Debug --output-on-failure
+
+也可在提交根目录运行script/build_and_run.sh或script/build_and_run.bat，统一构建五个阶段。

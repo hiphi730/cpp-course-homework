@@ -1,0 +1,35 @@
+综合实验
+
+对应需求：需求1至需求4、课后综合作业-支持不同的车辆类型.md。
+对应课件：实验4-综合实战.pptx，车辆状态表以第55页为准。
+
+设计说明：
+1. include/保留公开接口；src/pose维护状态；src/action实现原子动作；src/command负责解析与编排；src/common提供泛型单例。
+2. ActionGroup用vector保存单格前进、单格后退、真实左转、真实右转、F/B切换动作，再按顺序执行。
+3. CommandFactory按值保存std::function函数对象。Singleton<CommandFactory>复用只读解析表，车辆状态不共享。
+4. 每条命令执行前读取即时B/F状态，再生成动作组，避免先计算整批动作而丢失中间状态变化。
+5. 普通车M为1格，跑车M为2格，F下次数翻倍；所有移动由单格动作重复构成。
+6. 跑车L/R在转向后增加1次移动；Bus在转向前增加1次移动。F再于转向前增加1次移动。B使这些移动后退，并交换L/R方向。
+7. TR按完整双字符消费。普通状态为左转、前进一格、左转；F为前进一格、左转、前进一格、左转。
+8. TR使用真实动作，不受B和各车辆M/L/R特殊行为影响；TR之后仍保留原有B/F状态。
+
+需求冲突处理：
+综合课件第39至42页的BTR示例将掉头忽略，与需求4及示范文件夹的代码说明不一致。本实现以需求4和示范说明为准：BTR正常掉头，BFTR按加速掉头执行。
+
+测试说明：
+共267例，包括18例基础、17例加速、30例倒车、144例车辆/状态/朝向组合、1例多车辆状态切换、48例各车辆/状态/朝向TR、7例TR混合批量解析、2例原子动作测试。
+
+文件组织：
+include/：对外接口。
+src/：本阶段完整实现，不依赖其他实验的业务源码。
+tests/：本阶段GoogleTest测试及构建文件。
+CMakeLists.txt：本阶段构建入口。
+各阶段共用提交根目录的cmake/和third_party/，请保留整个提交文件夹。
+
+从提交根目录单独构建本阶段：
+cmake -S "综合实验" -B "build-stage5" -DCMAKE_BUILD_TYPE=Debug
+cmake --build "build-stage5" --config Debug --parallel
+cd "build-stage5"
+ctest -C Debug --output-on-failure
+
+也可在提交根目录运行script/build_and_run.sh或script/build_and_run.bat，统一构建五个阶段。

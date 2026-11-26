@@ -1,0 +1,28 @@
+实验1-高质量编程基础
+
+对应需求：需求1-基本控制指令.md。
+本阶段实现初始化、查询、M/L/R及批量指令。默认位置为(0,0,N)，坐标采用std::int32_t。
+
+设计说明：
+1. Executor.hpp为对外抽象接口，工厂隐藏具体实现，虚析构保证通过基类指针正确释放。
+2. ExecutorImpl封装坐标和朝向，M按当前朝向移动一格；L/R使用方向表循环切换朝向。
+3. Execute依次处理字符串中的每条指令，Query返回当前位置的副本。
+4. 工厂返回的指针交给std::unique_ptr管理。参数合法性和整数不溢出由课程约束保证。
+
+测试说明：
+ExecutorTest.cpp共18例，覆盖默认/指定位置、四向移动、八种转向、批量指令、空串、闭合路径、跨批次执行、多对象隔离及int32边界查询。
+
+文件组织：
+include/：对外接口。
+src/：本阶段完整实现，不依赖其他实验的业务源码。
+tests/：本阶段GoogleTest测试及构建文件。
+CMakeLists.txt：本阶段构建入口。
+各阶段共用提交根目录的cmake/和third_party/，请保留整个提交文件夹。
+
+从提交根目录单独构建本阶段：
+cmake -S "实验1-高质量编程基础" -B "build-stage1" -DCMAKE_BUILD_TYPE=Debug
+cmake --build "build-stage1" --config Debug --parallel
+cd "build-stage1"
+ctest -C Debug --output-on-failure
+
+也可在提交根目录运行script/build_and_run.sh或script/build_and_run.bat，统一构建五个阶段。
